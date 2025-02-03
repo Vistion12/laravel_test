@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\IndexController as AdminController;
 use App\Http\Controllers\PostsController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,7 +16,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::view('/','index')->name('home');
-
+Route::get('/post/{id}', [PostsController::class,'show'])->name('post');
 Route::get('/posts',[PostsController::class,'index'])->name('posts');
 
-Route::get('/post/{id}', [PostsController::class,'show'])->name('post');
+Route::name('admin. ')
+    ->prefix('admin')
+    ->group(function(){
+        Route::get('/',[AdminController::class, 'index'])->name('index');
+        Route::get('/users', [AdminController::class, 'posts'])->name('posts');
+        Route::get('/posts',[AdminController::class, 'posts'])->name('posts');
+        Route::get('/categories',[AdminController::class, 'categories'])->name('categories');
+    });
+

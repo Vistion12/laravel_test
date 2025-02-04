@@ -11,7 +11,7 @@ class PostsController extends Controller
     {
         $posts = $posts->getPosts();
 
-        return view('posts', [
+        return view('posts.index', [
             'posts' => $posts,
         ]);
     }
@@ -20,7 +20,7 @@ class PostsController extends Controller
     {
         $post = $posts->getPost($id);
 
-        return view('post', [
+        return view('posts.show', [
             'post' => $post,
         ]);
     }

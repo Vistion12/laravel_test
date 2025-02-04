@@ -14,7 +14,7 @@ class IndexController extends Controller
 
     public function posts()
     {
-        return view('admin.posts');
+        return view('admin.posts.index');
     }
 
     public function categories()

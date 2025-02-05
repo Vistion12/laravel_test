@@ -11,7 +11,7 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 @forelse($posts as $post)
-                    <a href="{{route('posts.show',$post['id'])}}">{{$post['title']}} </a><br>
+                    <a href="{{ route('posts.show', $post->id) }}">{{ $post->title }}</a><br>
                 @empty
                     <p>нет постов</p>
                 @endforelse

@@ -13,7 +13,7 @@
                     <div class="card-header">Посты</div>
 
                     <div class="card-body">
-                        <a href="" class="btn btn-success">создать пост</a>
+                        <a href="{{route('admin.create')}}" class="btn btn-success">создать пост</a>
 
                         <h2>CRUD посты</h2>
                     </div>

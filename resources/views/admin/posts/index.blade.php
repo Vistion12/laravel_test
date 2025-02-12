@@ -25,7 +25,9 @@
                         @forelse ($posts as $post)
                             <div class="mb-2">
                                 <a href="{{ route('admin.posts.edit', $post) }}" class="btn btn-primary">изменить</a>
-                                <a href="{{ route('admin.posts.create') }}" class="btn btn-danger">удалить</a>
+                                <form action="{{ route('posts.delete', $post) }}" method="GET" style="display:inline;">
+                                    <button type="submit" class="btn btn-danger">Удалить</button>
+                                </form>
                                 <a href="{{ route('posts.show', $post) }}">{{ $post->title }}</a>
                                 <br>
 
@@ -34,6 +36,7 @@
                         @empty
                             <p>Нет постов</p>
                         @endforelse
+                        {{ $posts->links() }}
                     </div>
                 </div>
             </div>

@@ -12,7 +12,8 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::all();
+        //$posts = Post::all();
+        $posts=Post::query()->paginate(10);
 
         return view('admin.posts.index', [
             'posts' => $posts
@@ -50,7 +51,20 @@ class PostController extends Controller
         }
         return back()->with('error', 'Ошибка изменения поста');
     }
+    public function destroy(Post $post)
+    {
+        // Удаление поста
+        if ($post->delete()) {
+            return redirect()->route('admin.posts.index')->with('success', 'Пост успешно удален!');
+        }
 
+        return back()->with('error', 'Ошибка удаления поста.');
+    }
+
+    public function delete(Post $post)
+    {
+        return view('admin.posts.delete', compact('post'));
+    }
     public function store(Request $request)
     {
         //валидация должна происходить в контроллере

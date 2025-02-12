@@ -10,8 +10,6 @@ class PostController extends Controller
 {
     public function index()
     {
-        //$posts = $posts->getPosts();
-        //$posts = DB::table('posts')->get();
         $posts=Post::query()->paginate(10);
 
 
@@ -20,19 +18,9 @@ class PostController extends Controller
         ]);
     }
 
-    public function show( Post $post) //опять же, либо айди, либо слаг
+    public function show( Post $post)
     {
-        //$post = $posts->getPost($id);
-        //$post = DB::table('posts')->find($id);
-//        if (!$post) {
-//            abort(404);
-//        }
-
-
-       // $post = Post::query()->findOrFail($id);
-
-
-        return view('posts.show', [
+      return view('posts.show', [
             'post' => $post,
         ]);
     }

@@ -22,6 +22,10 @@ Route::view('/', 'index')->name('home');
 
 Route::get('/posts/{post}', [PostController::class, 'show'])->where('post', '[0-9]+')->name('posts.show');
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+
+Route::get('/posts/{post}/delete', [AdminPostController::class, 'delete'])->name('posts.delete');
+Route::delete('/posts/{post}', [AdminPostController::class, 'destroy'])->name('posts.destroy');
+
 Route::get('/posts/categories/', [CategoryController::class, 'index'])->name('posts.categories.index');
 Route::get('/posts/categories/{category}', [CategoryController::class, 'show'])->name('posts.categories.show');
 
@@ -35,7 +39,11 @@ Route::name('admin.')
         Route::get('/users', [AdminIndexController::class, 'posts'])->name('users');
 
         Route::resource('/posts', AdminPostController::class)->except('show');
-        /*
+
+        Route::get('/categories', [AdminIndexController::class, 'categories'])->name('categories');
+    });
+Auth::routes();
+/*
               Route::name('posts.')
                     ->prefix('posts')
                     ->group(function () {
@@ -47,15 +55,4 @@ Route::name('admin.')
                         Route::put('/update/{post}', [AdminPostController::class, 'update'])->name('update');
                         Route::delete('/destroy/{post}', [AdminPostController::class, 'destroy'])->name('destroy');
                     });*/
-
-
-
-        Route::get('/categories', [AdminIndexController::class, 'categories'])->name('categories');
-    });
-
-
-
-
-Auth::routes();
-
 //Route::get('/home', [HomeController::class, 'index'])->name('home');

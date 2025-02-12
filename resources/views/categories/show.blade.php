@@ -6,19 +6,20 @@
     @include('parts.menu')
 @endsection
 
+
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
-                @forelse($posts as $post)
-                    <a href="{{ route('posts.show', $post->id) }}">{{ $post->title }}</a><br>
+                <h2>Посты категории {{ $category->name }}</h2>
+                @forelse ($category->posts as $post)
+                    <a href="{{ route('posts.show', $post) }}">{{ $category->name }} {{ $post->title }}</a><br>
                 @empty
-                    <p>нет постов</p>
+                    <p>Нет постов</p>
                 @endforelse
 
-                {{ $posts->links() }}
+
             </div>
         </div>
     </div>
 @endsection
-

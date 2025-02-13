@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdatePostRequest;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -36,15 +37,17 @@ class PostController extends Controller
         ]);
     }
 
-    public function update(Request $request, Post $post)
+    public function update(UpdatePostRequest $request, Post $post)
     {
-        $validated = $request->validate([
-            'title' => 'required|min:5|max:255',
-            'text' => 'required|min:5|max:20000',
-            'category_id' => 'required|exists:categories,id',
-        ]);
 
-        $post->fill($validated);
+        $data = $request->validated();
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('posts', 'public');
+            $data['image'] = $imagePath;
+        }
+
+        $post->fill($data);
 
         if ($post->save()) {
             return redirect()->route('posts.show', $post)->with('success', 'Пост успешно изменен!');
@@ -72,9 +75,15 @@ class PostController extends Controller
             'title' => 'required|min:5|max:255',
             'text' => 'required|min:5|max:20000',
             'category_id' => 'required|exists:categories,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         try {
+            $imagePath = null;
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('posts', 'public');
+            }
+            $validated['image'] = $imagePath;
             $post = Post::create($validated);
         }catch (\Exception $e){
             return redirect()->route('admin.posts.create')->with('error', 'ошибка добавления поста' . $e->getMessage());

@@ -8,10 +8,32 @@ use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
+
+    public function addLike(string $id)
+    {
+        $post = Post::find($id);
+
+        if ($post) {
+            $post->increment('likes');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Лайк успешно поставлен',
+                'likes' => $post->likes
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Пост не найден',
+        ], 404);
+    }
+
     public function index()
     {
-        $posts=Post::query()->paginate(10);
-
+        //$posts = $posts->getPosts();
+        //$posts = DB::table('posts')->get();
+        $posts = Post::orderBy('likes', 'desc')->paginate(10);
 
         return view('posts.index', [
             'posts' => $posts,

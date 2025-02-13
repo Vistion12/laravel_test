@@ -28,11 +28,12 @@ Route::delete('/posts/{post}', [AdminPostController::class, 'destroy'])->name('p
 
 Route::get('/posts/categories/', [CategoryController::class, 'index'])->name('posts.categories.index');
 Route::get('/posts/categories/{category}', [CategoryController::class, 'show'])->name('posts.categories.show');
-
+Route::post('/posts/{id}/add/like', [PostController::class, 'addLike'])->name('posts.like.add');
 
 
 
 Route::name('admin.')
+    ->middleware(['auth', 'is_admin'])
     ->prefix('admin')
     ->group(function () {
         Route::get('/', [AdminIndexController::class, 'index'])->name('index');

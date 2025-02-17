@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -71,26 +72,23 @@ class UserController extends Controller
         return redirect()->route('admin.users.index')->with('success', 'Пользователь успешно добавлен');
     }
 
-    public function addAdmin(string $id)
-    {
+    public function addAdmin(string $id){
         $user = User::find($id);
-        if ($user) {
-            $user->is_admin = !$user->is_admin; // переключаем статус
-            if ($user->save()) {
+        if($user){
+            $user->is_admin=(($user->is_admin == 1) ?0:1);
+            if($user->save()){
                 return response()->json([
-                    'success' => true,
-                    'message' => 'Статус админа успешно изменен',
-                ]);
-            }
+                    'success'=> 'true',
+                    'message'=> 'Статус админа успешно изменен',
+                ]);}
             return response()->json([
-                'success' => false,
-                'message' => 'Статус админа не изменен'
-            ], 404);
+                'success'=> false,
+                'message'=> 'Статус админа не изменен'],404);
+
         }
 
         return response()->json([
-            'success' => false,
-            'message' => 'Пользователь не найден'
-        ], 404);
+            'success'=> false,
+            'message'=> 'Пользователь не найден'],404);
     }
 }

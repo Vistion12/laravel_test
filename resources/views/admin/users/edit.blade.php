@@ -83,12 +83,9 @@
                             <div class="row mb-3">
                                 <div class="col-md-6 offset-md-4">
                                     <div class="form-check">
-                                        <input class="form-check-input"
-                                               type="checkbox"
-                                               name="is_admin"
-                                               id="is_admin"
-                                            {{ $user->is_admin ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="is_admin">
+                                        <input class="form-check-input" type="checkbox" name="is_admin" id="is_admin"
+                                            @checked(old('is_admin', $user->is_admin))>
+                                        <label class="form-check-label" for="flexCheckDefault">
                                             Администратор
                                         </label>
                                     </div>

@@ -45,6 +45,8 @@ Route::name('admin.')
 
         Route::resource('/users', AdminUserController::class);
 
+        Route::post('/users/{id}/admin', [AdminUserController::class, 'addAdmin'])->name('add');
+
         Route::resource('/posts', AdminPostController::class)->except('show');
 
         Route::delete('/destroy/{post}', [AdminPostController::class, 'destroy'])->name('destroy');

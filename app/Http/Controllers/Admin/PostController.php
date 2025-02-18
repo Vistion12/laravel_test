@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
 {
@@ -70,6 +71,9 @@ class PostController extends Controller
 //    }
     public function store(Request $request)
     {
+
+
+
         //валидация должна происходить в контроллере
         $validated = $request->validate([
             'title' => 'required|min:5|max:255',

@@ -6,8 +6,10 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +23,28 @@ use Illuminate\Support\Facades\Route;
 */
 //restfull
 // Public Routes
+Route::get('/github/redirect', function () {
+    return Socialite::driver('github')->redirect();
+});
+
+Route::get('/github/callback', function () {
+    $socialUser = Socialite::driver('github')->user();
+    //dd($socialUser);
+    $user = User::query()->where('email', $socialUser->getEmail())->first();
+    //dd($user);
+    if (!$user) {
+        $user = User::query()->create([
+           'email' => $socialUser->getEmail(),
+            'name' => $socialUser->getName(),
+            'password'=>'password',
+        ]);
+    }
+    Auth::login($user);
+    return redirect('/');
+});
+
+
+
 Route::view('/', 'index')->name('home');
 
 // Post Routes

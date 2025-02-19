@@ -46,6 +46,7 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, User $user)
     {
+
         $data = $request->validated();
         $data['is_admin'] = $request->has('is_admin') ? 1 : 0;
 

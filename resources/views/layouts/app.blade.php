@@ -32,7 +32,12 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
                 @yield('menu')
-
+                <form action="{{ route('posts.search') }}" method="GET">
+                    <input type="text" name="query" placeholder="Поиск поста..." value="{{ request('query') }}">
+                    <button type="submit" class="btn btn-primary">
+                        Поиск
+                    </button>
+                </form>
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ms-auto">
                     <!-- Authentication Links -->

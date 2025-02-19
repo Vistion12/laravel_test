@@ -6,20 +6,20 @@
     @include('parts.menu')
 @endsection
 
-
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
+                @include('parts.messages')
 
                 @forelse ($posts as $post)
-
                     <a href="{{ route('posts.show', $post) }}">{{ $post->title }} : {{ $post->likes }}</a><br>
                 @empty
                     <p>Нет постов</p>
                 @endforelse
 
-                {{ $posts->links() }}
+                <!-- Добавляем параметр query в ссылки пагинации -->
+                {{ $posts->appends(['query' => request('query')])->links() }}
 
             </div>
         </div>

@@ -9,6 +9,31 @@ use Illuminate\Support\Facades\DB;
 class PostController extends Controller
 {
 
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+
+//        $posts = Post::query()
+//            ->where('title', 'LIKE', "%{$query}%")
+//            ->orWhere('text', 'LIKE', "%{$query}%")
+//            ->paginate(10);
+
+//        $postsTitle = Post::query()->title($query);
+//        $postsText = Post::query()->text($query);
+//
+//        $posts = $postsTitle->union($postsText)->paginate(10);
+        if (empty($query)) {
+            return redirect()->route('posts.index')->with('error', 'Введите текст для поиска.');
+        }
+        $posts=Post::query()->titleAndText($query)->paginate(10);
+
+        session()->flash('success', 'Результат поиска строки "' . $query . '"');
+
+        return view('posts.index', [
+            'posts' => $posts,
+            'query' => $query, // Передаем запрос для использования в форме поиска
+        ]);
+    }
     public function addLike(string $id)
     {
         $post = Post::find($id);

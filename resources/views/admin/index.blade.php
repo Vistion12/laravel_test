@@ -1,9 +1,7 @@
 @extends('layouts.app')
-
 @section('title', 'Админ | Главная')
-
 @section('menu')
-    @include('admin.parts.menu')
+@include('admin.parts.menu')
 @endsection
 @section('content')
     <div class="container">

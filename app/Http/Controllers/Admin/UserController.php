@@ -44,15 +44,19 @@ class UserController extends Controller
         return back()->with('error', 'Ошибка удаления Пользователя');
     }
 
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(Request $request, User $user)
     {
+        $id_admin=$request->get('is_admin') == 'on' ? 1 : 0;
+        $data = $request->validate([
+            'name' => 'required|min:5|max:255',
+            'email' => 'unique:users,email,'.$user->id.'|required|min:5|max:255'
+        ]);
 
-        $data = $request->validated();
-        $data['is_admin'] = $request->has('is_admin') ? 1 : 0;
 
+        $user->is_admin=$id_admin;
         $user->fill($data);
 
-        if ($user->save()) {
+        if ($user->update()) {
             return redirect()->route('admin.users.index')->with('success', 'Пользователь успешно изменен!');
         }
 
@@ -61,16 +65,15 @@ class UserController extends Controller
 
     public function store(CreateUserRequest $request)
     {
+        $id_admin=$request->get('is_admin') == 'on' ? 1 : 0;
         $validated = $request->validated();
-        $validated['is_admin'] = $request->has('is_admin') ? 1 : 0;
-
+        $validated['is_admin']=$id_admin;
         try {
-            User::create($validated);
+            $post = User::create($validated);
         } catch (\Exception $e) {
             return redirect()->route('admin.users.create')->with('error', 'Ошибка добавления пользователя! ' . $e->getMessage());
         }
-
-        return redirect()->route('admin.users.index')->with('success', 'Пользователь успешно добавлен');
+        return redirect()->route('admin.users.index' )->with('success', 'Пользователь успешно добавлен');
     }
 
     public function addAdmin(string $id){
@@ -80,11 +83,11 @@ class UserController extends Controller
             if($user->save()){
                 return response()->json([
                     'success'=> 'true',
-                    'message'=> 'Статус админа успешно изменен',
+                    'message'=> 'Статус админа успешно иземенен',
                 ]);}
             return response()->json([
                 'success'=> false,
-                'message'=> 'Статус админа не изменен'],404);
+                'message'=> 'Статус админа не иземенен'],404);
 
         }
 

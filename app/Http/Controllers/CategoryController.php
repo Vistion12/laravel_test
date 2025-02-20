@@ -16,13 +16,6 @@ class CategoryController extends Controller
 
     public function show(Category $category)
     {
-        //  $category = Category::query()->findOrFail($id);
-
-        // $posts = Post::where('category_id', $category->id)->get();
-
-        //  $category = Category::query()->with('posts')->find($id);
-
-
         return view('categories.show', [
             'category' => $category
         ]);

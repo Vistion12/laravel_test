@@ -21,6 +21,6 @@ class IndexController extends Controller
 
     public function categories()
     {
-        return view('admin.categories');
+        return view('admin.categories.index');
     }
 }

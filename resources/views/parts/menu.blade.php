@@ -3,7 +3,7 @@
         <a class="nav-link" href="{{ route('posts.index') }}">Посты</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('posts.categories.index') }}">Категории</a>
+        <a class="nav-link" href="{{ route('categories.index') }}">Категории</a>
     </li>
     @guest
     @else

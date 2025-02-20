@@ -14,7 +14,7 @@
 
                 @forelse ($categories as $category)
 
-                    <a href="{{ route('posts.categories.show', $category) }}">{{ $category->name }}</a><br>
+                    <a href="{{ route('categories.show', $category) }}">{{ $category->name }}</a><br>
                 @empty
                     <p>Нет категорий</p>
                 @endforelse

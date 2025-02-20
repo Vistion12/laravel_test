@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\IndexController as AdminIndexController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
@@ -54,10 +55,9 @@ Route::post('/posts/{id}/add/like', [PostController::class, 'addLike'])->name('p
 
 Route::get('/posts/search', [PostController::class, 'search'])->name('posts.search');
 
-
 // Category Routes
-Route::get('/posts/categories/', [CategoryController::class, 'index'])->name('posts.categories.index');
-Route::get('/posts/categories/{category}', [CategoryController::class, 'show'])->name('posts.categories.show');
+Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
 
 // User Routes
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
@@ -75,10 +75,9 @@ Route::name('admin.')
         Route::post('/users/{id}/admin', [AdminUserController::class, 'addAdmin'])->name('add');
 
         Route::resource('/posts', AdminPostController::class)->except('show');
-
         Route::delete('/destroy/{post}', [AdminPostController::class, 'destroy'])->name('destroy');
 
-        Route::get('/categories', [AdminIndexController::class, 'categories'])->name('categories');
+        Route::resource('/categories', AdminCategoryController::class);
     });
 
 Auth::routes();

@@ -13,15 +13,6 @@ class PostController extends Controller
     {
         $query = $request->input('query');
 
-//        $posts = Post::query()
-//            ->where('title', 'LIKE', "%{$query}%")
-//            ->orWhere('text', 'LIKE', "%{$query}%")
-//            ->paginate(10);
-
-//        $postsTitle = Post::query()->title($query);
-//        $postsText = Post::query()->text($query);
-//
-//        $posts = $postsTitle->union($postsText)->paginate(10);
         if (empty($query)) {
             return redirect()->route('posts.index')->with('error', 'Введите текст для поиска.');
         }
@@ -58,17 +49,20 @@ class PostController extends Controller
     {
         //$posts = $posts->getPosts();
         //$posts = DB::table('posts')->get();
-        $posts = Post::orderBy('likes', 'desc')->paginate(10);
+        $posts = Post::orderBy('likes', 'desc')->paginate(12);
 
         return view('posts.index', [
             'posts' => $posts,
         ]);
     }
 
-    public function show( Post $post)
+    public function show(Post $post)
     {
-      return view('posts.show', [
+        $comments = $post->comments()->latest()->get();
+
+        return view('posts.show', [
             'post' => $post,
+            'comments' => $comments,
         ]);
     }
 }

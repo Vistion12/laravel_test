@@ -82,11 +82,11 @@ class UserController extends Controller
             if($user->save()){
                 return response()->json([
                     'success'=> 'true',
-                    'message'=> 'Статус админа успешно иземенен',
+                    'message'=> 'Статус админа успешно изменен',
                 ]);}
             return response()->json([
                 'success'=> false,
-                'message'=> 'Статус админа не иземенен'],404);
+                'message'=> 'Статус админа не изменен'],404);
 
         }
 

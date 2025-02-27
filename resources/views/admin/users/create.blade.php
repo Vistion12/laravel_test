@@ -19,7 +19,7 @@
                     <div class="card-body">
                         <form method="POST" action="{{ route('admin.users.store') }}">
                             @csrf
-
+                            <input type="hidden" name="is_admin" value="0">
                             <div class="row mb-3">
                                 <label for="name" class="col-md-4 col-form-label text-md-end">Имя</label>
 
@@ -84,10 +84,7 @@
                             <div class="row mb-3">
                                 <div class="col-md-6 offset-md-4">
                                     <div class="form-check">
-                                        <input class="form-check-input"
-                                               type="checkbox"
-                                               name="is_admin"
-                                               id="is_admin">
+                                        <input class="form-check-input" type="checkbox" name="is_admin" id="is_admin" value="1">
                                         <label class="form-check-label" for="is_admin">
                                             Администратор
                                         </label>

@@ -22,7 +22,8 @@
                                             {{ $post->title }}
                                         </a>
                                     </h5>
-                                    <p class="card-text">Likes: {{ $post->likes }}</p>
+                                    <p class="card-text">{{ $post->likes }} человек отметили этот пост интересным</p>
+                                    <p class="card-text">Комментарии: {{ $post->comments->count() }}</p>
                                     <a href="{{ route('posts.show', $post) }}" class="btn btn-primary">Читать далее</a>
                                 </div>
                             </div>

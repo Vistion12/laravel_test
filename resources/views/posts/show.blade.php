@@ -27,9 +27,7 @@
                         Likes: <span id="likeCount">{{ $post->likes }}</span>
                     </button>
 
-
-                    <div class="card-body">Комментарии: {{ $comments->count() }}</div>
-
+                    <div class="card-body">Комментарии: {{ $post->comments->count() }}</div>
 
                     <form action="{{ route('comments.store', $post) }}" method="POST">
                         @csrf
@@ -42,7 +40,7 @@
                     <hr>
 
                     <div class="comments mt-4">
-                        @foreach ($comments as $comment)
+                        @foreach ($post->comments as $comment)
                             <div class="card mb-3" style="border: 1px solid #ccc; padding: 15px;">
                                 <div class="card-body">
                                     <span class="text-muted" style="font-size: 0.9em;">Дата: {{ $comment->created_at->format('d-m-Y H:i') }}</span>:<br>

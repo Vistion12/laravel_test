@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 // публичные роуты
+
+
 Route::view('/', 'index')->name('home');
 
 // роуты авторизации через гитхаб
@@ -75,7 +77,7 @@ Route::name('admin.')
         // админовская панель
         Route::get('/', [AdminIndexController::class, 'index'])->name('index');
 
-        // администрирование юзера
+        // администрирование юзеров
         Route::prefix('users')->group(function () {
             Route::get('/', [AdminUserController::class, 'index'])->name('users.index');
             Route::get('/create', [AdminUserController::class, 'create'])->name('users.create');
@@ -109,6 +111,8 @@ Route::name('admin.')
 
 
 Auth::routes();
+
+
 
 
 

@@ -3,17 +3,25 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
+use App\Services\CategoryService;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    protected $categoryService;
+    public function __construct(CategoryService $categoryService)
+    {
+        $this->categoryService = $categoryService;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $categories = Category::query()->paginate(5);
+        $categories = $this->categoryService->getAllCategories();
 
         return view('admin.categories.index', [
             'categories' => $categories
@@ -31,19 +39,16 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|min:2|max:255|unique:categories,name'
-        ]);
+        $validated = $request->validated();
 
         try {
-            $category = Category::create($validated);
+            $this->categoryService->createCategory($validated);
+            return redirect()->route('admin.categories.index')->with('success', 'Категория успешно добавлена!');
         } catch (\Exception $e) {
             return redirect()->route('admin.categories.create')->with('error', 'Ошибка добавления категории: ' . $e->getMessage());
         }
-
-        return redirect()->route('admin.categories.index')->with('success', 'Категория успешно добавлена!');
     }
 
     /**
@@ -60,15 +65,11 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(UpdateCategoryRequest $request, Category $category)
     {
-        $validated = $request->validate([
-            'name' => 'required|min:2|max:255|unique:categories,name,' . $category->id
-        ]);
+        $validated = $request->validated();
 
-        $category->fill($validated);
-
-        if ($category->save()) {
+        if ($this->categoryService->updateCategory($category, $validated)) {
             return redirect()->route('admin.categories.index')->with('success', 'Категория успешно изменена!');
         }
 
@@ -80,14 +81,10 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        if ($category->posts()->count() > 0) {
-            return back()->with('error', 'Невозможно удалить категорию, так как она содержит посты.');
-        }
-
-        if ($category->delete()) {
+        if ($this->categoryService->deleteCategory($category)) {
             return redirect()->route('admin.categories.index')->with('success', 'Категория успешно удалена!');
         }
 
-        return back()->with('error', 'Ошибка удаления категории');
+        return back()->with('error', 'Невозможно удалить категорию, так как она содержит посты.');
     }
 }

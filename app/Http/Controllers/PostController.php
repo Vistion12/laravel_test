@@ -3,11 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Services\PostService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
+    protected $postService;
+
+    public function __construct(PostService $postService)
+    {
+        $this->postService = $postService;
+    }
 
     public function search(Request $request)
     {
@@ -16,53 +23,36 @@ class PostController extends Controller
         if (empty($query)) {
             return redirect()->route('posts.index')->with('error', 'Введите текст для поиска.');
         }
-        $posts=Post::query()->titleAndText($query)->paginate(10);
+
+        $posts = $this->postService->searchPosts($query);
 
         session()->flash('success', 'Результат поиска строки "' . $query . '"');
 
         return view('posts.index', [
             'posts' => $posts,
-            'query' => $query, // Передаем запрос для использования в форме поиска
+            'query' => $query,
         ]);
     }
     public function addLike(string $id)
     {
-        $post = Post::find($id);
+        $result = $this->postService->addLike($id);
 
-        if ($post) {
-            $post->increment('likes');
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Лайк успешно поставлен',
-                'likes' => $post->likes
-            ]);
+        if ($result['success']) {
+            return response()->json($result);
         }
 
-        return response()->json([
-            'success' => false,
-            'message' => 'Пост не найден',
-        ], 404);
+        return response()->json($result, 404);
     }
 
     public function index()
     {
-        //$posts = $posts->getPosts();
-        //$posts = DB::table('posts')->get();
-        $posts = Post::orderBy('likes', 'desc')->paginate(12);
-
-        return view('posts.index', [
-            'posts' => $posts,
-        ]);
+        $posts = $this->postService->getAllPosts();
+        return view('posts.index', compact('posts'));
     }
 
-    public function show(Post $post)
+    public function show(string $id)
     {
-        $comments = $post->comments()->latest()->get();
-
-        return view('posts.show', [
-            'post' => $post,
-            'comments' => $comments,
-        ]);
+        $post = $this->postService->getPostWithComments($id);
+        return view('posts.show', compact('post'));
     }
 }

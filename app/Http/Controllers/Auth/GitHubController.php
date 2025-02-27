@@ -19,21 +19,17 @@ class GitHubController extends Controller
     {
         $socialUser = Socialite::driver('github')->user();
 
-
         $user = User::query()->where('email', $socialUser->getEmail())->first();
-
 
         if (!$user) {
             $user = User::query()->create([
                 'email' => $socialUser->getEmail(),
                 'name' => $socialUser->getName(),
-                'password' => bcrypt('password'),  // Здесь можно генерировать случайный пароль
+                'password' => bcrypt('password'),
             ]);
         }
 
-
         Auth::login($user);
-
 
         return redirect()->route('home');
     }

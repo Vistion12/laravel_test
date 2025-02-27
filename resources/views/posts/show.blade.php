@@ -13,6 +13,16 @@
 
                 @include('parts.messages')
 
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 <div class="card">
                     <div class="card-header">{{ $post->title }}</div>
 
@@ -32,7 +42,12 @@
                     <form action="{{ route('comments.store', $post) }}" method="POST">
                         @csrf
                         <div class="mb-3">
-                            <textarea class="form-control" name="comment" rows="3" required></textarea>
+                            <textarea class="form-control @error('comment') is-invalid @enderror" name="comment" rows="3" required></textarea>
+                            @error('comment')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
                         </div>
                         <button type="submit" class="btn btn-primary w-25 likeButton ms-3 mb-2">Добавить комментарий</button>
                     </form>

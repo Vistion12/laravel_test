@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateCommentRequest;
+use App\Http\Requests\UpdateCommentRequest;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Services\CommentService;
@@ -17,14 +19,11 @@ class CommentController extends Controller
         $this->commentService = $commentService;
     }
 
-    public function store(Request $request, Post $post)
+    public function store(CreateCommentRequest $request, Post $post)
     {
-        $request->validate([
-            'comment' => 'required|min:5|max:1000',
-        ]);
-
         try {
-            $this->commentService->createComment($post, $request->only('comment'));
+            $validatedData = $request->validated();
+            $this->commentService->createComment($post, $validatedData);
             return redirect()->route('posts.show', $post->id)->with('success', 'Комментарий успешно добавлен!');
         } catch (\Exception $e) {
             return back()->with('error', 'Ошибка при добавлении комментария: ' . $e->getMessage());
@@ -53,14 +52,11 @@ class CommentController extends Controller
         return back()->with('error', 'Вы не можете редактировать этот комментарий.');
     }
 
-    public function update(Request $request, Comment $comment)
+    public function update(UpdateCommentRequest $request, Comment $comment)
     {
-        $request->validate([
-            'comment' => 'required|min:5|max:1000',
-        ]);
-
         try {
-            if ($this->commentService->updateComment($comment, $request->only('comment'))) {
+            $validatedData = $request->validated();
+            if ($this->commentService->updateComment($comment, $validatedData)) {
                 return redirect()->route('posts.show', $comment->post_id)->with('success', 'Комментарий обновлен!');
             }
             return back()->with('error', 'Вы не можете редактировать этот комментарий.');
